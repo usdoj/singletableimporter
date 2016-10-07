@@ -1,0 +1,13 @@
+{
+    "name": "usdoj/singletableimporter",
+    "require": {
+        "doctrine/dbal": "2.5.4",
+        "keboola/csv": "1.1.4",
+        "phpoffice/phpexcel": "1.8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "USDOJ\\SingleTableImporter\\": "src"
+        }
+    }
+}
