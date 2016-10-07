@@ -124,6 +124,18 @@ class Importer {
     }
 
     /**
+     * Do a test run, which throws an exception if it would fail.
+     */
+    public function testRun() {
+
+        $inputFileName = $this->getSourceFile();
+        $rows = $this->dataToArray($inputFileName);
+        if (empty($rows) || count($rows) <= 1) {
+            throw new \Exception('Aborting SingleTableImporter run: insufficient source data.');
+        }
+    }
+
+    /**
      * Run the importer.
      *
      * @throws \Exception
