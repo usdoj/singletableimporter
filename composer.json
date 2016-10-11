@@ -3,7 +3,8 @@
     "require": {
         "doctrine/dbal": "2.5.4",
         "keboola/csv": "1.1.4",
-        "phpoffice/phpexcel": "1.8.1"
+        "phpoffice/phpexcel": "1.8.1",
+        "nategood/httpful": "0.2.20"
     },
     "autoload": {
         "psr-4": {

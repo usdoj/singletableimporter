@@ -59,4 +59,14 @@ database table: myTable
 # change all occurences of § with &#167; uncomment the lines below.
 #text alterations:
 #    "§": "&#167;"
+
+# If the environment needs to use a proxy, uncomment and fill out this section.
+# proxy: 192.168.1.1:8080
+
+# To prevent the use of the proxy for certain URLs, enter partial patterns here.
+# proxy exceptions:
+#    - .example.com
+
+# To use a certain user agent for remote requests, uncomment and indicate here.
+# user agent: Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36
 ```

@@ -77,7 +77,48 @@ class Importer {
     public function __construct($config, $sourceFile) {
 
         if (!is_file($sourceFile)) {
-            die(sprintf('Source data not found at %s', $sourceFile));
+            // If the file does not exist, see if it can be downloaded.
+            $request = \Httpful\Request::get($sourceFile);
+
+            // Should we use a proxy?
+            $proxy = $this->settings('proxy');
+            if (!empty($proxy)) {
+                $exceptions = $this->settings('proxy exception');
+                $useProxy = TRUE;
+                if (!empty($exceptions)) {
+                    foreach ($exceptions as $exception) {
+                        if (strpos($sourceFile, $exception) !== FALSE) {
+                            $useProxy = FALSE;
+                        }
+                    }
+                }
+                if ($useProxy) {
+                    $proxyParts = explode(':', $proxy);
+                    if (count($proxyParts) > 1) {
+                        $request->useProxy($proxyParts[0], $proxyParts[1]);
+                    }
+                    else {
+                        $request->useProxy($proxyParts[0]);
+                    }
+                }
+            }
+
+            // Should we alter the user agent?
+            $agent = $this->settings('user agent');
+            if (!empty($agent)) {
+                $request->withUserAgent($agent);
+            }
+
+            $response = $request->send();
+            if (!$response->hasErrors()) {
+                $fileName = basename($sourceFile);
+                $sourceFile = '/tmp/' . $fileName;
+                file_put_contents($sourceFile, $response->body);
+            }
+            else {
+                // If it can't be downloaded either, abort.
+                die(sprintf('Source data not found at %s', $sourceFile));
+            }
         }
 
         $this->config = $config;
