@@ -329,7 +329,7 @@ class Importer {
         $dateFormats = $this->settings('date formats');
         if (is_array($dateFormats) && !empty($dateFormats[$column])) {
             foreach ($dateFormats[$column] as $format) {
-                $dateObj = DateTime::createFromFormat($format, $dateString);
+                $dateObj = \DateTime::createFromFormat($format, $dateString);
                 if (!empty($dateObj)) {
                     $unixTimestamp = $dateObj->getTimestamp();
                     break;
