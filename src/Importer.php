@@ -286,7 +286,7 @@ class Importer {
             if (!empty($this->dateColumns)) {
                 foreach ($header as $index => $column) {
                     if (in_array($column, $this->dateColumns)) {
-                        $filteredRow[$index] = $this->convertDate($filteredRow[$index]);
+                        $filteredRow[$index] = $this->convertDate($filteredRow[$index], $column);
                     }
                 }
             }
@@ -311,9 +311,12 @@ class Importer {
      * @param int $dateString
      *   A raw date string to convert.
      *
+     * @param string $column
+     *   The name of the database column.
+     *
      * @return string
      */
-    private function convertDate($dateString) {
+    private function convertDate($dateString, $column) {
 
         // What we're trying to get.
         $unixTimestamp = NULL;
@@ -322,7 +325,13 @@ class Importer {
             return $dateString;
         }
 
-        if (is_numeric($dateString)) {
+        // First check to see if we have a specified format for this column.
+        $dateFormats = $this->settings('date formats');
+        if (is_array($dateFormats) && !empty($dateFormats[$column])) {
+            $dateObj = DateTime::createFromFormat($dateFormats[$column], $dateString);
+            $unixTimestamp = $dateObj->getTimestamp();
+        }
+        else if (is_numeric($dateString)) {
             $dateInt = (int) $dateString;
 
             // The easiest to recognize is Excel's unique date format, which is

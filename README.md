@@ -69,4 +69,12 @@ database table: myTable
 
 # To use a certain user agent for remote requests, uncomment and indicate here.
 # user agent: Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36
+
+# Date values can be in a wide range of formats. This library tries to be
+# forgiving, but sometimes you need to specify the specific format. The
+# syntax to use here is what would be passed to DateTime::createFromFormat.
+# Reference: http://php.net/manual/en/datetime.createfromformat.php
+date formats:
+    # Parse date values like 11/7/2011 (November 7th, 2011)
+    "myDatabaseColumn": "n/j/Y"
 ```
