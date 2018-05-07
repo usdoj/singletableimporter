@@ -328,8 +328,13 @@ class Importer {
         // First check to see if we have a specified format for this column.
         $dateFormats = $this->settings('date formats');
         if (is_array($dateFormats) && !empty($dateFormats[$column])) {
-            $dateObj = DateTime::createFromFormat($dateFormats[$column], $dateString);
-            $unixTimestamp = $dateObj->getTimestamp();
+            foreach ($dateFormats[$column] as $format) {
+                $dateObj = DateTime::createFromFormat($format, $dateString);
+                if (!empty($dateObj)) {
+                    $unixTimestamp = $dateObj->getTimestamp();
+                    break;
+                }
+            }
         }
         else if (is_numeric($dateString)) {
             $dateInt = (int) $dateString;

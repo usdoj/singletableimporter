@@ -74,7 +74,12 @@ database table: myTable
 # forgiving, but sometimes you need to specify the specific format. The
 # syntax to use here is what would be passed to DateTime::createFromFormat.
 # Reference: http://php.net/manual/en/datetime.createfromformat.php
+# Note that each column has an array of formats, to allow for multipel formats
+# within a single column.
 date formats:
-    # Parse date values like 11/7/2011 (November 7th, 2011)
-    "myDatabaseColumn": "n/j/Y"
+    "myDatabaseColumn":
+        # Parse date values like 11/7/2011 (November 7th, 2011)
+        - "n/j/Y"
+        # Parse date values like 11-07-11 (November 7th, 2011)
+        - "m-d-y"
 ```
