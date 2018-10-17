@@ -59,6 +59,10 @@ database table: myTable
 # change all occurences of § with &#167; uncomment the lines below.
 #text alterations:
 #    "§": "&#167;"
+# Additionally you can specify alterations for a particular column only.
+#text alterations per column:
+#    myDatabaseColumn1:
+#        "§": "&#167;"
 
 # If the environment needs to use a proxy, uncomment and fill out this section.
 # proxy: 192.168.1.1:8080

@@ -276,6 +276,18 @@ class Importer {
 
             // Do we need to filter any of the text?
             $filteredRow = $row;
+            // Look for text alerations specific to particular columns.
+            $textAlterationsPerColumn = $this->settings('text alterations per column');
+            if (!empty($textAlterationsPerColumn)) {
+                foreach ($header as $index => $column) {
+                    if (!empty($textAlterationsPerColumn[$column])) {
+                        foreach ($textAlterationsPerColumn[$column] as $search => $replace) {
+                            $filteredRow[$index] = str_replace($search, $replace, $filteredRow[$index]);
+                        }
+                    }
+                }
+            }
+            // Look for global text alterations.
             $textAlterations = $this->settings('text alterations');
             if (!empty($textAlterations)) {
                 foreach ($textAlterations as $search => $replace) {
