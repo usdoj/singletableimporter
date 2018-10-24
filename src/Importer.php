@@ -196,6 +196,7 @@ class Importer {
             $rows = $this->dataToArray($inputFileName);
 
             $table = $this->settings('database table');
+            $requiredColumns = $this->settings('required columns');
             $numInserted = 0;
             foreach ($rows as $row) {
                 $anonymousParameters = array();
@@ -207,6 +208,11 @@ class Importer {
                         // empty header columns.
                         continue;
                     }
+                    // Skip rows that don't have values in required columns.
+                    if (is_array($requiredColumns) && in_array($column, $requiredColumns) && empty($value)) {
+                        continue;
+                    }
+                    
                     $insert->setValue('`' . $column . '`', '?');
                     $anonymousParameters[] = $value;
                 }
