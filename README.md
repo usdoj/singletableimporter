@@ -86,4 +86,10 @@ date formats:
         - "n/j/Y"
         # Parse date values like 11-07-11 (November 7th, 2011)
         - "m-d-y"
+
+# Indicate the columns that are required to have data in order for a row to
+# to be imported. For example, if you don't want any rows to be imported
+# without titles, make your title column a required column here.
+required columns:
+    - myDatabaseColumn1
 ```
