@@ -209,7 +209,7 @@ class Importer {
                         continue;
                     }
                     // Skip rows that don't have values in required columns.
-                    if (in_array($column, $requiredColumns) && empty($value)) {
+                    if (is_array($requiredColumns) && in_array($column, $requiredColumns) && empty($value)) {
                         continue;
                     }
                     
