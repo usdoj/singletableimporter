@@ -208,9 +208,9 @@ class Importer {
                         // empty header columns.
                         continue;
                     }
-                    // Skip rows that don't have values in required columns.
+                    // Skip entire rows if there isn't a value in a required column.
                     if (is_array($requiredColumns) && in_array($column, $requiredColumns) && empty($value)) {
-                        continue;
+                        continue 2;
                     }
                     
                     $insert->setValue('`' . $column . '`', '?');
