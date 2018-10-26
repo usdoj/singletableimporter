@@ -267,7 +267,9 @@ class Importer {
         }
         else {
             // If not an Excel file, assume it is CSV.
-            $rows = new \Keboola\Csv\CsvFile($filePath);
+            $delimiter = $this->getConfig()->get('csv delimiter', ',');
+            $enclosure = $this->getConfig()->get('csv enclosure', '"');
+            $rows = new \Keboola\Csv\CsvFile($filePath, $delimiter, $enclosure);
             $header = $rows->getHeader();
         }
 
