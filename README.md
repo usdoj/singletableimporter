@@ -92,4 +92,10 @@ date formats:
 # without titles, make your title column a required column here.
 required columns:
     - myDatabaseColumn1
+
+# Set the delimiter for CSV imports. Defaults to a comma.
+csv delimiter: ','
+
+# Set the enclosure for CSV imports Defaults to a double-quote.
+csv enclosure: '"'
 ```
