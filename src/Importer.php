@@ -179,7 +179,9 @@ class Importer {
      */
     public function run() {
 
-        $this->delete();
+        if (!$this->settings('additive imports')) {
+          $this->delete();
+        }
         $this->insert();
     }
 
