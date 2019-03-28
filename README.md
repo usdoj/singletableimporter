@@ -98,4 +98,8 @@ csv delimiter: ','
 
 # Set the enclosure for CSV imports Defaults to a double-quote.
 csv enclosure: '"'
+
+# Allow for imports that will be "additive". If set to FALSE then each
+# import will start by deleting all rows.
+additive imports: FALSE
 ```
