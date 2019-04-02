@@ -137,7 +137,7 @@ class Importer {
             if (!$response->hasErrors()) {
                 $fileName = basename($sourceFile);
                 $sourceFile = '/tmp/' . $fileName;
-                file_put_contents($sourceFile, $response->body);
+                file_put_contents($sourceFile, strval($response));
             }
             else {
                 // If it can't be downloaded either, abort.
