@@ -107,42 +107,44 @@ class Importer {
 
         if (!is_file($sourceFile)) {
             // If the file does not exist, see if it can be downloaded.
-            $request = \Httpful\Request::get($sourceFile);
+            $clientOptions = [];
 
-            // Should we use a proxy?
             $proxy = $this->settings('proxy');
             if (!empty($proxy)) {
                 $exceptions = $this->settings('proxy exceptions');
                 if (!empty($exceptions)) {
                     foreach ($exceptions as $exception) {
-                        if (strpos($sourceFile, $exception) !== FALSE) {
-                            $proxy = NULL;
+                        if (strpos($sourceFile, $exception) !== false) {
+                            $proxy = null;
                             break;
                         }
                     }
                 }
-                // Rather than use Request::useProxy(), we use the less
-                // abstracted addOnCurlOption, because we may actually want to
-                // nullify a proxy usage that was inherited from Bash
-                // environment variables, by passing in a $proxy of NULL.
-                $request->addOnCurlOption(CURLOPT_PROXY, $proxy);
+                if (!empty($proxy)) {
+                    $clientOptions['proxy'] = $proxy;
+                }
             }
 
-            // Should we alter the user agent?
             $agent = $this->settings('user agent');
             if (!empty($agent)) {
-                $request->withUserAgent($agent);
+                $clientOptions['headers']['User-Agent'] = $agent;
             }
 
-            $response = $request->send();
-            if (!$response->hasErrors()) {
-                $fileName = basename($sourceFile);
-                $sourceFile = '/tmp/' . $fileName;
-                file_put_contents($sourceFile, strval($response));
-            }
-            else {
-                // If it can't be downloaded either, abort.
-                die(sprintf('Source data not found at %s', $sourceFile));
+            $client = new \GuzzleHttp\Client($clientOptions);
+
+            try {
+                $response = $client->request('GET', $sourceFile);
+
+                if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
+                    $fileName = basename($sourceFile);
+                    $tempPath = '/tmp/' . $fileName;
+                    file_put_contents($tempPath, (string) $response->getBody());
+                    $sourceFile = $tempPath;
+                } else {
+                    throw new \Exception("HTTP error: " . $response->getStatusCode());
+                }
+            } catch (\Exception $e) {
+                die(sprintf('Source data not found at %s (%s)', $sourceFile, $e->getMessage()));
             }
         }
         $this->sourceFile = $sourceFile;

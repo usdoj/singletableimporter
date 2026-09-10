@@ -5,20 +5,11 @@
         "doctrine/dbal": "^2.13",
         "keboola/csv": "1.1.4",
         "phpoffice/phpspreadsheet": "^1.26",
-        "nategood/httpful": "0.2.20"
+        "guzzlehttp/guzzle": "^7.0"
     },
     "autoload": {
         "psr-4": {
-            "USDOJ\\SingleTableImporter\\": "src"
-        }
-    },
-    "config": {
-        "policy": {
-            "advisories": {
-                "ignore": [
-                    "PKSA-4dtf-ym9h-t41j"
-                ]
-            }
+            "USDOJ\\SingleTableImporter\\": "src/"
         }
     }
 }
