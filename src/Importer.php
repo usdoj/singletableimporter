@@ -96,8 +96,9 @@ class Importer {
         // Take note of all the datetime columns so that their facets can be
         // rendered hierarchically.
         $this->dateColumns = array();
-        $statement = $this->getDb()->query('DESCRIBE ' . $this->settings('database table'));
-        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $sql = 'DESCRIBE ' . $this->settings('database table');
+        $statement = $this->getDb()->executeQuery($sql);
+        $result = $statement->fetchAllAssociative();
         foreach ($result as $column) {
             if ('datetime' == $column['Type']) {
                 $this->dateColumns[] = $column['Field'];
@@ -223,7 +224,7 @@ class Importer {
                     ->execute();
             }
             print sprintf('Imported %s rows.', $numInserted) . PHP_EOL;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $pathInfo = pathinfo($inputFileName, PATHINFO_BASENAME);
             throw new \Exception(sprintf('Error loading file %s: %s', $pathInfo, $e->getMessage()));
         }
@@ -258,14 +259,12 @@ class Importer {
 
         // Support Excel files.
         if ('xls' == $extension || 'xlsx' == $extension) {
-            $objReader = \PHPExcel_IOFactory::createReader('Excel2007');
-            $objPHPExcel = $objReader->load($filePath);
-            foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
-                $rows = $worksheet->toArray();
-                $header = $rows[0];
-                // We only get the first worksheet.
-                break;
-            }
+            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+            $spreadsheet = $reader->load($filePath);
+
+            $worksheet = $spreadsheet->getActiveSheet();
+            $rows = $worksheet->toArray();
+            $header = $rows[0];
         }
         else {
             // If not an Excel file, assume it is CSV.

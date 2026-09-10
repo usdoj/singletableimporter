@@ -1,14 +1,24 @@
 {
     "name": "usdoj/singletableimporter",
     "require": {
-        "doctrine/dbal": "2.5.4",
+        "php": "^8.1",
+        "doctrine/dbal": "^2.13",
         "keboola/csv": "1.1.4",
-        "phpoffice/phpexcel": "1.8.1",
+        "phpoffice/phpspreadsheet": "^1.26",
         "nategood/httpful": "0.2.20"
     },
     "autoload": {
         "psr-4": {
             "USDOJ\\SingleTableImporter\\": "src"
+        }
+    },
+    "config": {
+        "policy": {
+            "advisories": {
+                "ignore": [
+                    "PKSA-4dtf-ym9h-t41j"
+                ]
+            }
         }
     }
 }
